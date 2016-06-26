@@ -21,10 +21,10 @@ main =
 
 -- model
 
-type alias PairId = Int
+type alias Index = Int
 
 type alias Model = 
-    { cards: Array (PairId, Card)
+    { cards: Array Card
     , gameState: GameState
     }
 
@@ -32,13 +32,14 @@ type alias Card =
     { caption: String
     , turned: Bool
     , found: Bool
+    , pairId: Int
     }
 
 type GameState
     = Initial
     | BeforeGuess
-    | AfterGuessOne PairId
-    | Failed PairId PairId
+    | AfterGuessOne Index
+    | Failed Index Index
     | Win
 
 init : (Model, Cmd Msg)
@@ -47,29 +48,29 @@ init = (Model mockData Initial, getRandomFloats <| length mockData)
 increment : Int -> Int
 increment int = int + 1
 
-updateCard : Bool -> Int -> Array (PairId, Card) -> Array (PairId, Card)
+updateCard : Bool -> Int -> Array Card -> Array Card
 updateCard turned index array =
     let
-        (pairId, card) = unsafeUnwrap <| get index array
+        card = unsafeUnwrap <| get index array
         turn = \card -> { card | turned = turned }
     in
-        set index (pairId, (turn card)) array
+        set index (turn card) array
 
 turnCard = updateCard True
 unTurnCard = updateCard False
 
-isPair : Int -> Int -> Array (PairId, Card) -> Bool
+isPair : Int -> Int -> Array Card -> Bool
 isPair indexA indexB cards =
     let
         getCard index = unsafeUnwrap <| get index cards
     in
-        fst (getCard indexA) == fst (getCard indexB)
+        .pairId (getCard indexA) == .pairId (getCard indexB)
 
 -- UPDATE
 
 type Msg
     = Shuffle (List Float)
-    | Turn PairId
+    | Turn Index
     | UnTurn
     | Reset
     | NoOp
@@ -136,8 +137,8 @@ view model =
         , div [] <| toList <| indexedMap cardView model.cards
         ]
 
-cardView : Int -> (PairId, Card) -> Html Msg
-cardView index (_, card) = 
+cardView : Int -> Card -> Html Msg
+cardView index card = 
     let
         caption = if card.turned then card.caption else ".."
 
@@ -157,25 +158,25 @@ subscriptions model =
 
 -- HELPERS
 
-card : String -> Card
-card caption =
+card : Int -> String -> Card
+card pairId caption =
     { caption = caption
     , turned = False
     , found = False
+    , pairId = pairId
     }
 
-mockData : Array (PairId, Card)
+mockData : Array Card
 mockData =
-    pairs <| List.map card ["hi", "bye", "hater", "flood", "paper"]
+    pairs <| List.indexedMap card ["hi", "bye", "hater", "flood", "paper"]
 
 
-pairs : List Card -> Array (PairId, Card)
+pairs : List Card -> Array Card
 pairs =
     let
         double = List.concatMap (\x -> [x, x])
-        giveID = List.indexedMap (,) >> double
     in
-        List.foldr push empty << giveID
+        List.foldr push empty << double
 
 id : a -> () -> a
 id a = \_ -> a
