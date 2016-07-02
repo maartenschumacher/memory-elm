@@ -9,6 +9,8 @@ import Time
 import Task
 import Array exposing (..)
 import Random
+import Assets
+import Styles
 
 main =
     Html.program
@@ -29,7 +31,7 @@ type alias Model =
     }
 
 type alias Card =
-    { caption: String
+    { imageSource: String
     , turned: Bool
     , found: Bool
     , pairId: Int
@@ -132,19 +134,22 @@ unTurnCmd = Process.sleep Time.second |> Task.perform (id NoOp) (id UnTurn)
 
 view : Model -> Html Msg
 view model =
-    div [] 
+    div [ style Styles.container ] 
         [ h1 [] [ text "memory" ]
-        , div [] <| toList <| indexedMap cardView model.cards
+        , div [ style Styles.imageContainer ] <| toList <| indexedMap cardView model.cards
         ]
 
 cardView : Int -> Card -> Html Msg
 cardView index card = 
     let
-        caption = if card.turned then card.caption else ".."
+        buttonContent = 
+            if card.turned then 
+                [ img [ src card.imageSource, style Styles.image ] [] ] 
+            else [ div [ style Styles.image ] [] ]
 
         action = if card.found || card.turned then NoOp else Turn index
     in
-        button [ onClick action ] [ text caption ]
+        button [ onClick action ] buttonContent
 
 
 -- SUBSCRIPTIONS
@@ -159,8 +164,8 @@ subscriptions model =
 -- HELPERS
 
 card : Int -> String -> Card
-card pairId caption =
-    { caption = caption
+card pairId imageSource =
+    { imageSource = imageSource
     , turned = False
     , found = False
     , pairId = pairId
@@ -168,7 +173,7 @@ card pairId caption =
 
 mockData : Array Card
 mockData =
-    pairs <| List.indexedMap card ["hi", "bye", "hater", "flood", "paper"]
+    pairs <| List.indexedMap card Assets.images
 
 
 pairs : List Card -> Array Card
