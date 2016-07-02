@@ -1,0 +1,8 @@
+var _user$project$Assets$assets = _elm_lang$core$Native_List.fromArray(
+	['trayvonmartin.jpg', 'tanisha.jpg', 'rsz_tamir-rice.jpg', 'rsz_1sandra-bland-linkedin.jpg', 'mike-brown-headshot-smaller.jpg', 'rsz_john-crawford-iii.jpg', 'rsz_eric_garner_facebook.jpg', 'dontre-hamilton.jpg']);
+var _user$project$Assets$images = A2(
+	_elm_lang$core$List$map,
+	function (asset) {
+		return A2(_elm_lang$core$Basics_ops['++'], '/img/', asset);
+	},
+	_user$project$Assets$assets);
