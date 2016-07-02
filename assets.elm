@@ -12,4 +12,4 @@ assets =
     , "dontre-hamilton.jpg"
     ]
 
-images = map (\asset -> "/img/" ++ asset) assets
+images = map (\asset -> "img/" ++ asset) assets
