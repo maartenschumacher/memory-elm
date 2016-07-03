@@ -17,12 +17,21 @@ centerLayout =
 
 container = columnLayout
 
-imageContainer =
+imagesContainer =
     [ display flex'
     , flexDirection row
     , flexWrap wrap
     , width (px 900)
     ]
+
+
+imageContainer =
+    concat 
+        [ centerLayout
+        , [ height (px 200)
+          , width (px 200)
+          ]
+        ]
 
 image =
     [ height (px 200)

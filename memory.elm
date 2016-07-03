@@ -136,20 +136,24 @@ view : Model -> Html Msg
 view model =
     div [ style Styles.container ] 
         [ h1 [] [ text "memory" ]
-        , div [ style Styles.imageContainer ] <| toList <| indexedMap cardView model.cards
+        , div [ style Styles.imagesContainer ] 
+            <| toList <| indexedMap cardView model.cards
         ]
 
 cardView : Int -> Card -> Html Msg
 cardView index card = 
     let
-        buttonContent = 
-            if card.turned then 
-                [ img [ src card.imageSource, style Styles.image ] [] ] 
-            else [ div [ style Styles.image ] [] ]
-
+        isHidden = not (card.found || card.turned)
         action = if card.found || card.turned then NoOp else Turn index
     in
-        button [ onClick action ] buttonContent
+        button 
+            [ onClick action, style Styles.imageContainer ] 
+            [ img 
+                [ src card.imageSource
+                , style Styles.image
+                , hidden isHidden 
+                ] 
+            [] ]
 
 
 -- SUBSCRIPTIONS
