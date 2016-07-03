@@ -6,8 +6,8 @@ var _user$project$Main$unsafeUnwrap = function (maybe) {
 		return _elm_lang$core$Native_Utils.crashCase(
 			'Main',
 			{
-				start: {line: 236, column: 5},
-				end: {line: 241, column: 57}
+				start: {line: 240, column: 5},
+				end: {line: 245, column: 57}
 			},
 			_p0)('Maybe turned out to be nothing');
 	}
@@ -20,8 +20,8 @@ var _user$project$Main$unsafeHead = function (list) {
 		return _elm_lang$core$Native_Utils.crashCase(
 			'Main',
 			{
-				start: {line: 226, column: 5},
-				end: {line: 231, column: 38}
+				start: {line: 230, column: 5},
+				end: {line: 235, column: 38}
 			},
 			_p2)('Empty array');
 	}
@@ -48,8 +48,8 @@ var _user$project$Main$extract = F2(
 			return _elm_lang$core$Native_Utils.crash(
 				'Main',
 				{
-					start: {line: 200, column: 9},
-					end: {line: 200, column: 20}
+					start: {line: 204, column: 9},
+					end: {line: 204, column: 20}
 				})('Index out of range');
 		}
 	});
@@ -256,35 +256,27 @@ var _user$project$Main$Turn = function (a) {
 var _user$project$Main$cardView = F2(
 	function (index, card) {
 		var action = (card.found || card.turned) ? _user$project$Main$NoOp : _user$project$Main$Turn(index);
-		var buttonContent = card.turned ? _elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$img,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$src(card.imageSource),
-						_elm_lang$html$Html_Attributes$style(_user$project$Styles$image)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[]))
-			]) : _elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$style(_user$project$Styles$image)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[]))
-			]);
+		var isHidden = _elm_lang$core$Basics$not(card.found || card.turned);
 		return A2(
 			_elm_lang$html$Html$button,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html_Events$onClick(action)
+					_elm_lang$html$Html_Events$onClick(action),
+					_elm_lang$html$Html_Attributes$style(_user$project$Styles$imageContainer)
 				]),
-			buttonContent);
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$img,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$src(card.imageSource),
+							_elm_lang$html$Html_Attributes$style(_user$project$Styles$image),
+							_elm_lang$html$Html_Attributes$hidden(isHidden)
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[]))
+				]));
 	});
 var _user$project$Main$view = function (model) {
 	return A2(
@@ -307,7 +299,7 @@ var _user$project$Main$view = function (model) {
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$style(_user$project$Styles$imageContainer)
+						_elm_lang$html$Html_Attributes$style(_user$project$Styles$imagesContainer)
 					]),
 				_elm_lang$core$Array$toList(
 					A2(_elm_lang$core$Array$indexedMap, _user$project$Main$cardView, model.cards)))

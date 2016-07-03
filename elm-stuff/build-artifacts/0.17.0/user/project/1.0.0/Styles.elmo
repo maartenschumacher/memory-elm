@@ -1,11 +1,9 @@
 var _user$project$Styles$image = _elm_lang$core$Native_List.fromArray(
 	[
-		_seanhess$elm_style$Style$height(
-		_seanhess$elm_style$Style$px(200)),
-		_seanhess$elm_style$Style$width(
-		_seanhess$elm_style$Style$px(200))
+		_seanhess$elm_style$Style$display(_seanhess$elm_style$Style$flex$),
+		_seanhess$elm_style$Style$flex('1')
 	]);
-var _user$project$Styles$imageContainer = _elm_lang$core$Native_List.fromArray(
+var _user$project$Styles$imagesContainer = _elm_lang$core$Native_List.fromArray(
 	[
 		_seanhess$elm_style$Style$display(_seanhess$elm_style$Style$flex$),
 		_seanhess$elm_style$Style$flexDirection(_seanhess$elm_style$Style$row),
@@ -19,6 +17,18 @@ var _user$project$Styles$centerLayout = _elm_lang$core$Native_List.fromArray(
 		_seanhess$elm_style$Style$justifyContent(_seanhess$elm_style$Style$center),
 		_seanhess$elm_style$Style$alignItems(_seanhess$elm_style$Style$center)
 	]);
+var _user$project$Styles$imageContainer = _elm_lang$core$List$concat(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_user$project$Styles$centerLayout,
+			_elm_lang$core$Native_List.fromArray(
+			[
+				_seanhess$elm_style$Style$height(
+				_seanhess$elm_style$Style$px(200)),
+				_seanhess$elm_style$Style$width(
+				_seanhess$elm_style$Style$px(200))
+			])
+		]));
 var _user$project$Styles$columnLayout = _elm_lang$core$Native_List.fromArray(
 	[
 		_seanhess$elm_style$Style$display(_seanhess$elm_style$Style$flex$),

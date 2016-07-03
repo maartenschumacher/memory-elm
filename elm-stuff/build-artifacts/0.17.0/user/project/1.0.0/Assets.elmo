@@ -3,6 +3,6 @@ var _user$project$Assets$assets = _elm_lang$core$Native_List.fromArray(
 var _user$project$Assets$images = A2(
 	_elm_lang$core$List$map,
 	function (asset) {
-		return A2(_elm_lang$core$Basics_ops['++'], '/img/', asset);
+		return A2(_elm_lang$core$Basics_ops['++'], 'img/', asset);
 	},
 	_user$project$Assets$assets);
