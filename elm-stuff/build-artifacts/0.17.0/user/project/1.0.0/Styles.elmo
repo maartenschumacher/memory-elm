@@ -1,7 +1,9 @@
 var _user$project$Styles$image = _elm_lang$core$Native_List.fromArray(
 	[
-		_seanhess$elm_style$Style$display(_seanhess$elm_style$Style$flex$),
-		_seanhess$elm_style$Style$flex('1')
+		_seanhess$elm_style$Style$height(
+		_seanhess$elm_style$Style$px(200)),
+		_seanhess$elm_style$Style$width(
+		_seanhess$elm_style$Style$px(200))
 	]);
 var _user$project$Styles$imagesContainer = _elm_lang$core$Native_List.fromArray(
 	[
