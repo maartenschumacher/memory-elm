@@ -1,0 +1,26 @@
+var _user$project$Model$card = F2(
+	function (pairId, imageSource) {
+		return {imageSource: imageSource, turned: false, found: false, pairId: pairId};
+	});
+var _user$project$Model$pairs = function () {
+	var $double = _elm_lang$core$List$concatMap(
+		function (x) {
+			return _elm_lang$core$Native_List.fromArray(
+				[x, x]);
+		});
+	return function (_p0) {
+		return A3(
+			_elm_lang$core$List$foldr,
+			_elm_lang$core$Array$push,
+			_elm_lang$core$Array$empty,
+			$double(_p0));
+	};
+}();
+var _user$project$Model$mockData = _user$project$Model$pairs(
+	A2(_elm_lang$core$List$indexedMap, _user$project$Model$card, _user$project$Assets$images));
+var _user$project$Model$init = {
+	ctor: '_Tuple2',
+	_0: A2(_user$project$Types$Model, _user$project$Model$mockData, _user$project$Types$Initial),
+	_1: _user$project$Update$getRandomFloats(
+		_elm_lang$core$Array$length(_user$project$Model$mockData))
+};

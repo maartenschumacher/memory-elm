@@ -1,0 +1,127 @@
+var _user$project$Update$isPair = F3(
+	function (indexA, indexB, cards) {
+		var getCard = function (index) {
+			return _user$project$Util$unsafeUnwrap(
+				A2(_elm_lang$core$Array$get, index, cards));
+		};
+		return _elm_lang$core$Native_Utils.eq(
+			function (_) {
+				return _.pairId;
+			}(
+				getCard(indexA)),
+			function (_) {
+				return _.pairId;
+			}(
+				getCard(indexB)));
+	});
+var _user$project$Update$updateCard = F3(
+	function (turned, index, array) {
+		var turn = function (card) {
+			return _elm_lang$core$Native_Utils.update(
+				card,
+				{turned: turned});
+		};
+		var card = _user$project$Util$unsafeUnwrap(
+			A2(_elm_lang$core$Array$get, index, array));
+		return A3(
+			_elm_lang$core$Array$set,
+			index,
+			turn(card),
+			array);
+	});
+var _user$project$Update$turnCard = _user$project$Update$updateCard(true);
+var _user$project$Update$unTurnCard = _user$project$Update$updateCard(false);
+var _user$project$Update$unTurnCmd = A3(
+	_elm_lang$core$Task$perform,
+	_user$project$Util$id(_user$project$Types$NoOp),
+	_user$project$Util$id(_user$project$Types$UnTurn),
+	_elm_lang$core$Process$sleep(_elm_lang$core$Time$second));
+var _user$project$Update$getRandomFloats = function (n) {
+	return A2(
+		_elm_lang$core$Random$generate,
+		_user$project$Types$Shuffle,
+		A2(
+			_elm_lang$core$Random$list,
+			n,
+			A2(_elm_lang$core$Random$float, 0, 1)));
+};
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var doNothing = {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		var _p0 = model.gameState;
+		switch (_p0.ctor) {
+			case 'Initial':
+				var _p1 = msg;
+				if (_p1.ctor === 'Shuffle') {
+					return {
+						ctor: '_Tuple2',
+						_0: {
+							cards: A2(_user$project$Util$shuffle, _p1._0, model.cards),
+							gameState: _user$project$Types$BeforeGuess
+						},
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return doNothing;
+				}
+			case 'BeforeGuess':
+				var _p2 = msg;
+				if (_p2.ctor === 'Turn') {
+					var _p3 = _p2._0;
+					return {
+						ctor: '_Tuple2',
+						_0: {
+							cards: A2(_user$project$Update$turnCard, _p3, model.cards),
+							gameState: _user$project$Types$AfterGuessOne(_p3)
+						},
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return doNothing;
+				}
+			case 'AfterGuessOne':
+				var _p6 = _p0._0;
+				var _p4 = msg;
+				if (_p4.ctor === 'Turn') {
+					var _p5 = _p4._0;
+					return A3(_user$project$Update$isPair, _p6, _p5, model.cards) ? {
+						ctor: '_Tuple2',
+						_0: {
+							cards: A2(_user$project$Update$turnCard, _p5, model.cards),
+							gameState: _user$project$Types$BeforeGuess
+						},
+						_1: _elm_lang$core$Platform_Cmd$none
+					} : {
+						ctor: '_Tuple2',
+						_0: {
+							cards: A2(_user$project$Update$turnCard, _p5, model.cards),
+							gameState: A2(_user$project$Types$Failed, _p6, _p5)
+						},
+						_1: _user$project$Update$unTurnCmd
+					};
+				} else {
+					return doNothing;
+				}
+			case 'Failed':
+				var _p7 = msg;
+				if (_p7.ctor === 'UnTurn') {
+					return {
+						ctor: '_Tuple2',
+						_0: {
+							cards: A3(
+								_elm_lang$core$List$foldr,
+								_user$project$Update$unTurnCard,
+								model.cards,
+								_elm_lang$core$Native_List.fromArray(
+									[_p0._0, _p0._1])),
+							gameState: _user$project$Types$BeforeGuess
+						},
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return doNothing;
+				}
+			default:
+				return doNothing;
+		}
+	});

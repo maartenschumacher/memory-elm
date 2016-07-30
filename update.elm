@@ -1,19 +1,13 @@
-module Update exposing (update, Msg)
+module Update exposing (update, getRandomFloats)
 
 import Process
 import Time
 import Task
 import Random
+import Array exposing (Array)
 
-import Model exposing (..)
-
-
-type Msg
-    = Shuffle (List Float)
-    | Turn Index
-    | UnTurn
-    | Reset
-    | NoOp
+import Types exposing (..)
+import Util exposing (..)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -78,10 +72,10 @@ unTurnCmd = Process.sleep Time.second |> Task.perform (id NoOp) (id UnTurn)
 updateCard : Bool -> Int -> Array Card -> Array Card
 updateCard turned index array =
     let
-        card = unsafeUnwrap <| get index array
+        card = unsafeUnwrap <| Array.get index array
         turn = \card -> { card | turned = turned }
     in
-        set index (turn card) array
+        Array.set index (turn card) array
 
 
 turnCard = updateCard True
@@ -91,6 +85,6 @@ unTurnCard = updateCard False
 isPair : Int -> Int -> Array Card -> Bool
 isPair indexA indexB cards =
     let
-        getCard index = unsafeUnwrap <| get index cards
+        getCard index = unsafeUnwrap <| Array.get index cards
     in
         .pairId (getCard indexA) == .pairId (getCard indexB)

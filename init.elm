@@ -1,4 +1,4 @@
-module Model exposing (Model, Card, GameState)
+module Model exposing (Model, Card, GameState, init)
 
 import Assets
 
