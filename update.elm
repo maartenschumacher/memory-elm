@@ -12,52 +12,33 @@ import Util exposing (..)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
-    let 
-        doNothing = (model, Cmd.none) 
-    in
-        case model.gameState of
-            Initial ->
-                case msg of
-                    Shuffle randomFloats ->
-                        ({ cards = shuffle randomFloats model.cards
-                        , gameState = BeforeGuess
-                        }, Cmd.none)
+    case (model.gameState, msg) of
+        (Initial, Shuffle randomFloats) ->
+            ({ cards = shuffle randomFloats model.cards
+            , gameState = BeforeGuess
+            }, Cmd.none)
 
-                    _ -> doNothing
+        (BeforeGuess, Turn index) ->
+            ({ cards = turnCard index model.cards
+            , gameState = AfterGuessOne index
+            }, Cmd.none)
 
-            BeforeGuess ->
-                case msg of
-                    Turn index ->
-                        ({ cards = turnCard index model.cards
-                        , gameState = AfterGuessOne index
-                        }, Cmd.none)
+        (AfterGuessOne guess, Turn index) ->
+            if isPair guess index model.cards then
+                ({ cards = turnCard index model.cards
+                , gameState = BeforeGuess
+                }, Cmd.none)
+            else 
+                ({ cards = turnCard index model.cards
+                , gameState = Failed guess index
+                }, unTurnCmd)
 
-                    _ -> doNothing
+        (Failed indexA indexB, UnTurn) ->
+            ({ cards = List.foldr unTurnCard model.cards [indexA, indexB]
+            , gameState = BeforeGuess
+            }, Cmd.none)
 
-            AfterGuessOne guess ->
-                case msg of
-                    Turn index ->
-                        if isPair guess index model.cards then
-                            ({ cards = turnCard index model.cards
-                            , gameState = BeforeGuess
-                            }, Cmd.none)
-                        else 
-                            ({ cards = turnCard index model.cards
-                            , gameState = Failed guess index
-                            }, unTurnCmd)
-
-                    _ -> doNothing
-
-            Failed indexA indexB ->
-                case msg of
-                    UnTurn ->
-                        ({ cards = List.foldr unTurnCard model.cards [indexA, indexB]
-                        , gameState = BeforeGuess
-                        }, Cmd.none)
-
-                    _ -> doNothing
-
-            _ -> doNothing
+        _ -> (model, Cmd.none)
 
 
 getRandomFloats : Int -> Cmd Msg
